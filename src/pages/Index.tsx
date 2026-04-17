@@ -8,8 +8,19 @@ const NAV_ITEMS = [
   { id: "circles", label: "Кружки" },
   { id: "events", label: "Афиша" },
   { id: "news", label: "Новости" },
+  { id: "gallery", label: "Галерея" },
   { id: "history", label: "История" },
   { id: "contacts", label: "Контакты" },
+];
+
+const GALLERY = [
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/efa4fdfa-5926-406c-9463-88473f897f8c.jpg", caption: "Дом культуры деревни Ключи" },
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/a2c68b17-51dc-4f2c-8245-ca2826b5c103.jpg", caption: "Хор «Берёзка» на сцене" },
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/0674fe7c-832f-4be9-9653-06d81a5b0cf9.jpg", caption: "Танцевальная студия «Ритм»" },
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/85aaf802-e954-4c9b-abeb-1b318482abdf.jpg", caption: "Кружок рукоделия" },
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/81ee56bd-4336-4437-9a09-e3e0612a0c31.jpg", caption: "Праздник весны" },
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/9a3841dd-4985-448a-8c48-2bdc19222cd9.jpg", caption: "Ансамбль гармонистов" },
+  { src: "https://cdn.poehali.dev/projects/b25e9160-aa10-43c3-8d6b-30209f0a43f2/files/e1566e20-03d9-4bd1-919b-c83187df3aff.jpg", caption: "Наш ДК осенью" },
 ];
 
 const SCHEDULE = [
@@ -59,6 +70,12 @@ export default function Index() {
   const [openDay, setOpenDay] = useState<string | null>("Понедельник");
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
   const [formSent, setFormSent] = useState(false);
+  const [lightbox, setLightbox] = useState<{ index: number } | null>(null);
+
+  const openLightbox = (index: number) => setLightbox({ index });
+  const closeLightbox = () => setLightbox(null);
+  const prevPhoto = () => setLightbox(lb => lb ? { index: (lb.index - 1 + GALLERY.length) % GALLERY.length } : null);
+  const nextPhoto = () => setLightbox(lb => lb ? { index: (lb.index + 1) % GALLERY.length } : null);
 
   const scrollTo = (id: string) => {
     setActiveSection(id);
@@ -281,6 +298,78 @@ export default function Index() {
             ))}
           </div>
         </section>
+
+        <Divider />
+
+        {/* Галерея */}
+        <section id="gallery" className="scroll-mt-20">
+          <SectionTitle icon="Images" title="Галерея" subtitle="Жизнь нашего ДК в фотографиях" />
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3">
+            {GALLERY.map((photo, i) => (
+              <button
+                key={i}
+                onClick={() => openLightbox(i)}
+                className="relative overflow-hidden rounded-2xl group aspect-square focus:outline-none"
+                style={{ border: "2px solid var(--dk-beige-dark)" }}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.caption}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3"
+                  style={{ background: "linear-gradient(to top, rgba(30,50,35,0.75) 0%, transparent 60%)" }}>
+                  <span className="text-xs font-golos leading-tight" style={{ color: "var(--dk-beige)" }}>{photo.caption}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Лайтбокс */}
+        {lightbox && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            style={{ background: "rgba(10,20,12,0.92)" }}
+            onClick={closeLightbox}
+          >
+            <button
+              className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+              style={{ background: "rgba(255,255,255,0.15)", color: "white" }}
+              onClick={closeLightbox}
+            >
+              <Icon name="X" size={18} />
+            </button>
+            <button
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+              style={{ background: "rgba(255,255,255,0.15)", color: "white" }}
+              onClick={e => { e.stopPropagation(); prevPhoto(); }}
+            >
+              <Icon name="ChevronLeft" size={20} />
+            </button>
+            <div
+              className="relative max-w-3xl w-full flex flex-col items-center gap-4 animate-scale-in"
+              onClick={e => e.stopPropagation()}
+            >
+              <img
+                src={GALLERY[lightbox.index].src}
+                alt={GALLERY[lightbox.index].caption}
+                className="w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl"
+              />
+              <div className="text-center">
+                <p className="font-cormorant text-xl" style={{ color: "var(--dk-beige)" }}>{GALLERY[lightbox.index].caption}</p>
+                <p className="text-xs font-golos mt-1" style={{ color: "rgba(243,237,224,0.5)" }}>{lightbox.index + 1} / {GALLERY.length}</p>
+              </div>
+            </div>
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+              style={{ background: "rgba(255,255,255,0.15)", color: "white" }}
+              onClick={e => { e.stopPropagation(); nextPhoto(); }}
+            >
+              <Icon name="ChevronRight" size={20} />
+            </button>
+          </div>
+        )}
 
         <Divider />
 
