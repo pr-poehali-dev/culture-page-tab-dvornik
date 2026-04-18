@@ -122,41 +122,52 @@ export default function Index() {
       </header>
 
       {/* Герой */}
-      <section className="relative overflow-hidden">
-        <div className="relative h-[420px] md:h-[500px]">
-          <img
-            src={HeroImage}
-            alt="Дом культуры деревни Ключи"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(61,102,69,0.35) 0%, rgba(30,50,35,0.7) 100%)" }} />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-            <p className="text-sm font-golos tracking-widest uppercase mb-3 animate-fade-in" style={{ color: "rgba(243,237,224,0.85)" }}>
+      <section style={{ background: "var(--dk-beige)" }}>
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row min-h-[480px]">
+
+          {/* Текстовая часть */}
+          <div className="flex-1 flex flex-col justify-center px-8 py-12 md:py-16 md:pr-10 order-2 md:order-1">
+            <p className="text-xs font-golos tracking-widest uppercase mb-4 animate-fade-in" style={{ color: "var(--dk-green)" }}>
               Сысертский округ · Свердловская область
             </p>
-            <h1 className="font-cormorant font-light text-5xl md:text-7xl mb-4 animate-slide-up" style={{ color: "var(--dk-beige)", animationDelay: "0.1s" }}>
-              Дом Культуры
+            <h1 className="font-cormorant font-light leading-none mb-2 animate-slide-up" style={{ fontSize: "clamp(3rem, 7vw, 5rem)", color: "var(--dk-text)", animationDelay: "0.1s" }}>
+              Дом<br />Культуры
             </h1>
-            <p className="font-cormorant italic text-2xl md:text-3xl animate-slide-up" style={{ color: "rgba(243,237,224,0.9)", animationDelay: "0.2s" }}>
+            <p className="font-cormorant italic text-2xl md:text-3xl mb-5 animate-slide-up" style={{ color: "var(--dk-green)", animationDelay: "0.15s" }}>
               деревня Ключи
             </p>
-            <div className="mt-8 flex gap-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+            <div className="w-14 h-px mb-5 animate-fade-in" style={{ background: "var(--dk-green)", animationDelay: "0.2s" }} />
+            <p className="font-golos text-sm leading-relaxed mb-8 max-w-xs animate-slide-up" style={{ color: "#6b5a45", animationDelay: "0.2s" }}>
+              Место, где живёт культура. Кружки, концерты и праздники для всех жителей округа.
+            </p>
+            <div className="flex flex-wrap gap-3 animate-slide-up" style={{ animationDelay: "0.3s" }}>
               <button
                 onClick={() => scrollTo("events")}
-                className="px-6 py-3 rounded-lg font-golos font-medium text-sm transition-all hover:scale-105"
-                style={{ background: "var(--dk-beige)", color: "var(--dk-green)" }}
+                className="px-6 py-3 rounded-xl font-golos font-medium text-sm transition-all hover:scale-105 hover:shadow-md"
+                style={{ background: "var(--dk-green)", color: "var(--dk-beige)" }}
               >
                 Афиша событий
               </button>
               <button
                 onClick={() => scrollTo("contacts")}
-                className="px-6 py-3 rounded-lg font-golos font-medium text-sm transition-all hover:scale-105 border"
-                style={{ borderColor: "rgba(243,237,224,0.5)", color: "var(--dk-beige)" }}
+                className="px-6 py-3 rounded-xl font-golos font-medium text-sm transition-all hover:scale-105 border-2"
+                style={{ borderColor: "var(--dk-green)", color: "var(--dk-green)", background: "transparent" }}
               >
                 Связаться с нами
               </button>
             </div>
           </div>
+
+          {/* Фото */}
+          <div className="md:w-[52%] order-1 md:order-2 overflow-hidden" style={{ minHeight: "300px" }}>
+            <img
+              src={HeroImage}
+              alt="Дом культуры деревни Ключи"
+              className="w-full h-full object-cover"
+              style={{ minHeight: "300px" }}
+            />
+          </div>
+
         </div>
       </section>
 
